@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"reloaded"
+	reloaded "reloaded/functions"
 )
 
 func main() {
@@ -23,14 +23,14 @@ func main() {
 		return
 	}
 
-	inputFile, err := os.Open(args[0])
+	inputFile, err := os.Open("files/" + args[0])
 	if err != nil {
 		fmt.Println("Error opening input file:", err)
 		return
 	}
 	defer inputFile.Close()
 
-	outputFile, err := os.Create(args[1])
+	outputFile, err := os.Create("files/" + args[1])
 	if err != nil {
 		fmt.Println("Error creating output file:", err)
 		return
@@ -46,10 +46,9 @@ func main() {
 		FlagsDone := reloaded.HandleTheFlags(SplitSpace)
 		HandleVowel := reloaded.VowelSituation(FlagsDone)
 		ConvTStr := strings.Join(HandleVowel, " ")
-		SecSplit := strings.Split(ConvTStr, " ")
-		SecConv := strings.Join(SecSplit, " ")
-		HandlePunc := reloaded.HandlePunctuations(SecConv)
-		finalResult := reloaded.HandleQuotes(HandlePunc)
+		HandlePunc := reloaded.HandlePunctuations(ConvTStr)
+		quotes := reloaded.HandleQuotes(HandlePunc)
+		finalResult := reloaded.HandlePunctuations(quotes)
 
 		_, err = writer.WriteString(finalResult + "\n")
 		if err != nil {
